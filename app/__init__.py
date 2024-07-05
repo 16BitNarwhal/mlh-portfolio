@@ -12,7 +12,7 @@ def index():
     about_section = "Hi! I'm Eric and I'm studying 💻 Software Engineering at the 🏫 University of Waterloo! I'm incredibly interested in 🤖 Machine Learning and I also love building out random 💡 ideas!"
     markers = [
         {'lat': 55, 'lon': -95, 'popup': 'Canada'},
-        {'lat': 40, 'lon': -100, 'popup': 'USA'},
+        {'lat': 40, 'lon': -100, 'popup': 'U.S.A.'},
         {'lat': 36, 'lon': 104, 'popup': 'China'},
         {'lat': 20, 'lon': -79, 'popup': 'Cuba'},
     ]
