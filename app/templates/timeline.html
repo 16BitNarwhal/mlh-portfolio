@@ -1,0 +1,49 @@
+{%extends "base.html" %}
+
+{%block content%}
+
+<div class="timeline-section">
+    <h3>Post something!<h3>
+    <div class="timeline-form">
+        <form>
+            <input type="text" name="name" id="name"/>
+            <input type="text" name="email" id="email"/>
+            <input type="text" name="content" id="content" placeholder="Write me a message :"/>
+            <p id='error'></p>
+            <button type="submit"><h4>Post</h4></button>
+        </form>
+        <script>
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                let inputName = document.getElementById("name").value;
+                let inputEmail = document.getElementById("email").value;
+                let inputContent = document.getElementById("content").value;
+
+                const payload = new FormData(form);
+                const data = (await fetch('/api/timeline_post', {
+                    method: 'POST',
+                    body: payload,
+                })).json();
+                document.getElementById("error").innerHTML = data.error
+                console.log(data)
+            });
+        </script>
+    </div>
+    <h3>Timeline Posts</h3>
+    <div class="timeline-posts">
+        <script>
+            (await fetch('/api/timeline_posts')).json().timeline_posts.forEach((post) => {
+                const postElement = document.createElement('div');
+                postElement.className = 'timeline-post';
+                postElement.innerHTML = `
+                    <h4>${post.name} - ${post.email}</h4>
+                    <p>Posted on: ${post.created_at}</p>
+                    <p>${post.content}</p>
+                `;
+                document.getElementById("timeline-posts").appendChild(postElement);
+            });
+        </script>
+    </div>
+</div>
+
+{%endblock%}

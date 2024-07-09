@@ -1,6 +1,7 @@
 import os
 import datetime
-from flask import Flask, render_template, request
+import re
+from flask import Flask, render_template, request, make_response, jsonify
 from dotenv import load_dotenv
 from peewee import *
 from playhouse.shortcuts import model_to_dict
@@ -101,11 +102,25 @@ def education():
     ]
     return render_template('education.html', name=name, title="Education", educations = educations, url=os.getenv("URL"))
 
+@app.route('/timeline')
+def timeline():
+    return render_template('timeline.html', name=name, title="Timeline")
+
 @app.route('/api/timeline_post', methods=['POST'])
 def post_time_line_post():
     name = request.form.get('name')
     email = request.form.get('email')
     content = request.form.get('content')
+
+    if name is None:
+        return make_response(jsonify({'error': 'Name is required'}), 400)
+    if email is None:
+        return make_response(jsonify({'error': 'Email is required'}), 400)
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return make_response(jsonify({'error': 'Invalid email'}), 400)
+    if content is None:
+        return make_response(jsonify({'error': 'Content is required'}), 400)
+
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
 
     return model_to_dict(timeline_post)

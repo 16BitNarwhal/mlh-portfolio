@@ -107,7 +107,7 @@ body {
     margin-bottom: 50px;
 }
 
-.content > div {
+.content > div, .timeline-posts {
     background-color: #1C539F;
     border-radius: 15px;
     border: none;
