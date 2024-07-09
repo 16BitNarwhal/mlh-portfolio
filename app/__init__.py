@@ -112,13 +112,13 @@ def post_time_line_post():
     email = request.form.get('email')
     content = request.form.get('content')
 
-    if name is None:
+    if not name:
         return make_response(jsonify({'error': 'Name is required'}), 400)
-    if email is None:
+    if not email:
         return make_response(jsonify({'error': 'Email is required'}), 400)
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
         return make_response(jsonify({'error': 'Invalid email'}), 400)
-    if content is None:
+    if not content:
         return make_response(jsonify({'error': 'Content is required'}), 400)
 
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
@@ -137,6 +137,10 @@ def get_time_line_post():
 
 @app.route('/api/timeline_post/<id>', methods=['DELETE'])
 def delete_time_line_post(id):
-    query=TimelinePost.delete().where(TimelinePost.id=={id})
-    query.execute()
+    TimelinePost.delete().where(TimelinePost.id=={id}).execute()
     return "Post successfully deleted"
+
+@app.route('/api/timeline_post', methods=['DELETE'])
+def delete_all_time_line_post():
+    TimelinePost.delete().execute()
+    return "All posts successfully deleted"

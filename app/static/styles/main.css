@@ -107,13 +107,20 @@ body {
     margin-bottom: 50px;
 }
 
-.content > div, .timeline-posts {
+.content > div {
     background-color: #1C539F;
     border-radius: 15px;
     border: none;
     color: white;
     text-align: center;
     padding: 10px 25px;
+}
+
+#timeline-posts > div {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
 }
 
 .main {
