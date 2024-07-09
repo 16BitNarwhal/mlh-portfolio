@@ -2,8 +2,6 @@
 
 tmux kill-server
 
-systemctl start mysqld
-
 for arg in "$@"; do
     if [ $arg="$@" ]; then
         git fetch
