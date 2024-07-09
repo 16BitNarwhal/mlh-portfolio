@@ -2,8 +2,14 @@
 
 tmux kill-server
 
-git fetch
-git reset origin/main --hard
+systemctl start mysqld
+
+for arg in "$@"; do
+    if [ $arg="$@" ]; then
+        git fetch
+        git reset origin/main --hard
+    fi
+done
 
 python3 -m venv venv
 source venv/bin/activate
