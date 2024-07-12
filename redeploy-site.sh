@@ -3,7 +3,7 @@
 tmux kill-server
 
 for arg in "$@"; do
-    if [ $arg="$@" ]; then
+    if [ $arg="remote" ]; then
         git fetch
         git reset origin/main --hard
     fi
@@ -14,4 +14,5 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 
-tmux new-session -d -s flask_server "flask run --host=0.0.0.0"
+systemctl daemon-reload
+systemctl restart myportfolio
