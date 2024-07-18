@@ -38,6 +38,7 @@ def initialize_database():
     mydb.create_tables([TimelinePost])
 
 
+
 name = "Eric Zhang"
 
 @app.route('/')
@@ -121,13 +122,13 @@ def post_time_line_post():
     content = request.form.get('content')
 
     if not name:
-        return make_response(jsonify({'error': 'Name is required'}), 400)
+        return make_response(jsonify({'error': 'Invalid name'}), 400)
     if not email:
         return make_response(jsonify({'error': 'Email is required'}), 400)
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
         return make_response(jsonify({'error': 'Invalid email'}), 400)
     if not content:
-        return make_response(jsonify({'error': 'Content is required'}), 400)
+        return make_response(jsonify({'error': 'Invalid content'}), 400)
 
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
 
