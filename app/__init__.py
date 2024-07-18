@@ -27,8 +27,11 @@ class TimelinePost(Model):
     class Meta:
         database = mydb
 
-mydb.connect()
-mydb.create_tables([TimelinePost])
+# Only initialize db before first request, not during import(for tests) 
+@app.before_first_request
+def initialize_database():
+    mydb.connect()
+    mydb.create_tables([TimelinePost])
 
 name = "Eric Zhang"
 
