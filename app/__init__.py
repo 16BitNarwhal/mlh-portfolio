@@ -9,12 +9,16 @@ from playhouse.shortcuts import model_to_dict
 load_dotenv()
 app = Flask(__name__)
 
-mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
-    user=os.getenv("MYSQL_USER"),
-    password=os.getenv("MYSQL_PASSWORD"),
-    host=os.getenv("MYSQL_HOST"),
-    port=3306
-)
+if os.getenv("TESTING") == "true":
+    print("Running in test mode")
+    mydb = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
+else:
+    mydb = MySQLDatabase(os.getenv("MYSQL_DATABASE"),
+        user=os.getenv("MYSQL_USER"),
+        password=os.getenv("MYSQL_PASSWORD"),
+        host=os.getenv("MYSQL_HOST"),
+        port=3306
+    )
 
 print(mydb)
 
@@ -27,8 +31,13 @@ class TimelinePost(Model):
     class Meta:
         database = mydb
 
-mydb.connect()
-mydb.create_tables([TimelinePost])
+# Only initialize db before first request, not during import(for tests) 
+@app.before_first_request
+def initialize_database():
+    mydb.connect()
+    mydb.create_tables([TimelinePost])
+
+
 
 name = "Eric Zhang"
 
@@ -113,13 +122,13 @@ def post_time_line_post():
     content = request.form.get('content')
 
     if not name:
-        return make_response(jsonify({'error': 'Name is required'}), 400)
+        return make_response(jsonify({'error': 'Invalid name'}), 400)
     if not email:
         return make_response(jsonify({'error': 'Email is required'}), 400)
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
         return make_response(jsonify({'error': 'Invalid email'}), 400)
     if not content:
-        return make_response(jsonify({'error': 'Content is required'}), 400)
+        return make_response(jsonify({'error': 'Invalid content'}), 400)
 
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
 
