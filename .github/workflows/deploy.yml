@@ -26,16 +26,10 @@ jobs:
             IdentityFile ~/.ssh/deploy-key.pem
             StrictHostKeyChecking no
           END
-          cat ~/.ssh/config
-          ls -la ~/.ssh/
-          cat ~/.ssh/deploy-key.pem 
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_IP: ${{ secrets.SSH_IP }}
       
-      - name: Test SSH connection
+      - name: Print project root directory
         run: ssh my-vps 'cd ${{ secrets.PROJECT_ROOT }} && pwd'
-        env:
-          PROJECT_ROOT: ${{ secrets.PROJECT_ROOT }}
-
